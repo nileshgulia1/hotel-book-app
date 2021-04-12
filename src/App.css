@@ -1,0 +1,118 @@
+.ui-segment {
+  padding: 8em 0em !important ;
+}
+
+.ui-header {
+  font-size: 2em !important;
+}
+
+.para-layout {
+  font-size: 1.33em;
+}
+
+.footer-segment {
+  padding: 0em !important;
+}
+
+.grid-column {
+  padding-bottom: 5em;
+  padding-top: 5em;
+}
+
+.ui-divider {
+  margin: 3em 0em !important;
+  text-transform: uppercase;
+}
+
+/* Header css */
+.mobile-heading-home-h1 {
+  font-size: 2em;
+  font-weight: normal;
+  margin-bottom: 0;
+  margin-top: 1.5em;
+}
+
+.desktop-heading-home-h1 {
+  font-size: 3em !important;
+  font-weight: normal;
+  margin-bottom: 0 !important;
+  margin-top: 3em !important;
+}
+
+.mobile-heading-home-h2 {
+  font-size: 1.5em;
+  font-weight: normal;
+  margin-top: 0.5em;
+}
+
+.desktop-heading-home-h2 {
+  font-size: 1.7em !important;
+  font-weight: normal;
+  margin-top: 1.5em !important;
+}
+
+/*end header */
+
+.mobile-menu-segment {
+  min-height: 350;
+  padding: 1em 0em;
+}
+
+.desktop-menu-segment {
+  min-height: 750 !important;
+  padding: 1em 0em !important;
+  background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/EeN01lAOxijss6byx/videoblocks-back-side-view-of-man-relaxing-on-the-beach-outdoors-background-using-smartphone-barefoot-luxury-relaxation-business-sea-ocean-freelancer_rc7f8v_8f_thumbnail-full04.png") !important;
+  background-size: cover !important;
+  width: 100%;
+}
+
+.hotel-logo {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hotel-logo-footer {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  padding-bottom: 4px;
+  color: #fff !important;
+}
+
+.excerpt-title {
+  color: rgba(96, 88, 88, 0.728);
+  font-size: 1.2em;
+}
+.ui.secondary.inverted.pointing.menu {
+  /* border-width: 2px; */
+  /* border-color: rgba(34,36,38,.15); */
+  border: none;
+}
+
+.ui.doubling.stackable.three.column.grid {
+  padding: 0em 2em !important;
+}
+
+.embed-video {
+  height: 500px !important;
+  width: 100%;
+}
+
+.ui-card {
+  overflow: hidden;
+}
+
+.ui.vertical.segment.ui-segment {
+  padding: 10em 6em !important;
+}
+
+h1.ui.center.aligned.header.ui-header {
+  padding-bottom: 34px;
+}
+
+.ui.fluid.card {
+  width: 100%;
+  max-width: 9999px;
+  min-height: 450px !important;
+}

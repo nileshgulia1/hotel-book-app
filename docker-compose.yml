@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  server:
+    build: ./server
+    expose: 
+      - 3001
+    environment:
+      USER_NAME: ${USER_NAME}
+      PASSWORD: ${PASSWORD}
+    ports:
+      - '3001:3001'
+    volumes:
+      - '.:/app/server'
+      - './app/node_modules'
+    environment:
+      - NODE_ENV=development
+    command: yarn start:server
+
+
+  client:
+    build: ./
+    expose: 
+      - 3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    environment:
+      - NODE_ENV=development
+    links:
+      - server
+    command: yarn start
+
+  node-prod:
+        container_name: hotel-app-prod
+        build:
+            context: .
+            dockerfile: ./Dockerfile-prod
+        ports:
+            - '80:80'
