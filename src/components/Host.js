@@ -28,48 +28,56 @@ class Host extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      toast.info(
-        <Toast
-          info
-          title={"New Booking"}
-          content={`Mr ${this.props.data.fullname} wants to book a property from ${this.props.data.date}`}
-        />
-      );
-    }, 2000);
+    const { data } = this.props;
+    if (data && Object.keys(data).length !== 0) {
+      setTimeout(() => {
+        toast.info(
+          <Toast
+            info
+            title={"New Booking"}
+            content={`Mr ${this.props.data.fullname} wants to book a property from ${this.props.data.date}`}
+          />
+        );
+      }, 2000);
+    }
   }
 
   render() {
+    const { data } = this.props;
     return (
       <ResponsiveContainer>
         <Helmet title={"Book Hotel"} />
         <Segment className="ui-segment" vertical>
-          <Grid doubling stackable>
-            <Grid.Column>
-              <Card>
-                <Image
-                  src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
-                  wrapped
-                  ui={false}
-                />
-                <Card.Content>
-                  <Card.Header>{this.props.data.fullname}</Card.Header>
-                  <Card.Meta>
-                    <span className="date">{this.props.data.duration}</span>
-                  </Card.Meta>
-                  <Card.Description>
-                    Hey there I want to book a Room!
-                  </Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    {this.props.data.guests}
-                  </a>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-          </Grid>
+          {data && Object.keys(data).length !== 0 ? (
+            <Grid doubling stackable>
+              <Grid.Column>
+                <Card>
+                  <Image
+                    src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                    wrapped
+                    ui={false}
+                  />
+                  <Card.Content>
+                    <Card.Header>{data.fullname}</Card.Header>
+                    <Card.Meta>
+                      <span className="date">{data.duration}</span>
+                    </Card.Meta>
+                    <Card.Description>
+                      Hey there I want to book a Room!
+                    </Card.Description>
+                  </Card.Content>
+                  <Card.Content extra>
+                    <a>
+                      <Icon name="user" />
+                      {data.guests}
+                    </a>
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            </Grid>
+          ) : (
+            <Header as="h2">No bookings yet</Header>
+          )}
         </Segment>
         <Segment inverted vertical style={{ padding: "5em 0em" }}>
           <Container>
