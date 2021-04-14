@@ -66,6 +66,13 @@
   width: 100%;
 }
 
+.home-menu-segment {
+  background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/EeN01lAOxijss6byx/videoblocks-back-side-view-of-man-relaxing-on-the-beach-outdoors-background-using-smartphone-barefoot-luxury-relaxation-business-sea-ocean-freelancer_rc7f8v_8f_thumbnail-full04.png") !important;
+  background-size: cover !important;
+  width: 100%;
+  padding-bottom: 20em !important;
+}
+
 .hotel-logo {
   display: block;
   margin: 0 auto;

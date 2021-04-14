@@ -1,24 +1,11 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Container, Menu, Segment, Visibility, Image } from "semantic-ui-react";
-import { createMedia } from "@artsy/fresnel";
 import HomepageHeading from "./Header";
 import logo from "../logo-6.svg";
 import { Link } from "react-router-dom";
 
-const AppMedia = createMedia({
-  breakpoints: {
-    mobile: 320,
-    tablet: 768,
-    computer: 992,
-    largeScreen: 1200,
-    widescreen: 1920,
-  },
-});
-
-const mediaStyles = AppMedia.createMediaStyle();
-const { Media, MediaContextProvider } = AppMedia;
-class DesktopContainer extends Component {
+class Home extends Component {
   state = {};
 
   hideFixedMenu = () => this.setState({ fixed: false });
@@ -37,13 +24,7 @@ class DesktopContainer extends Component {
           <Segment
             inverted
             textAlign="center"
-            className={!data && "desktop-menu-segment"}
-            style={
-              data && {
-                backgroundImage: `url(${data.thumbnail_url})`,
-                backgroundSize: "cover",
-              }
-            }
+            className={"home-menu-segment"}
             vertical
           >
             <Menu
@@ -76,8 +57,8 @@ class DesktopContainer extends Component {
   }
 }
 
-DesktopContainer.propTypes = {
+Home.propTypes = {
   children: PropTypes.node,
 };
 
-export default DesktopContainer;
+export default Home;

@@ -8,20 +8,25 @@ import {
   Header,
   Image,
   List,
+  Checkbox,
   Segment,
   Embed,
-  Rating,
+  Modal,
+  Form,
 } from "semantic-ui-react";
+import { toast } from "react-toastify";
+import { saveData } from "../actions";
 import Fetch from "../helpers/Fetch";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { find } from "lodash";
+import Toast from "./Toast";
+
 import logo from "../logo-17.svg";
 import { Helmet } from "react-helmet";
 import getSrc from "../helpers/getSrc";
 import { parseHTML, isParseError } from "../helpers/parseHTML";
-
-let def;
 class Article extends React.Component {
   constructor(props) {
     super(props);
@@ -29,11 +34,8 @@ class Article extends React.Component {
       data: [],
       rating: "",
       articleArray: [],
+      open: false,
     };
-    this.handleRate = this.handleRate.bind(this);
-    this.putDataToDB = this.putDataToDB.bind(this);
-    this.deleteFromDB = this.deleteFromDB.bind(this);
-    this.updateDataToDB = this.updateDataToDB.bind(this);
   }
 
   componentDidMount() {
@@ -43,96 +45,24 @@ class Article extends React.Component {
         data: value,
       });
     });
-    this.getDataFromDb();
   }
 
-  getDataFromDb = () => {
-    fetch("http://localhost:3001/api/getData")
-      .then((data) => data.json())
-      .then((res) => {
-        this.setState({ articleArray: res.data });
-      })
-      .then((e) => {
-        if (
-          this.state.articleArray.length > 0 &&
-          undefined !==
-            find(this.state.articleArray, [
-              "id",
-              parseInt(this.props.location.state.id),
-            ])
-        ) {
-          def = find(this.state.articleArray, [
-            "id",
-            parseInt(this.props.location.state.id),
-          ]).rating;
-          this.setState({
-            rating: def,
-          });
-        }
-      });
-  };
-
-  handleRate(e, { rating, maxRating }) {
-    this.setState({ rating, maxRating });
-    this.putDataToDB(rating);
-  }
-
-  putDataToDB = (message) => {
-    if (this.state.articleArray.length > 0) {
-      let newid = this.props.location.state.id;
-      let ratingobj = find(this.state.articleArray, ["id", parseInt(newid)]);
-      if (ratingobj !== undefined) {
-        this.updateDataToDB(ratingobj.id, message);
-      } else {
-        axios.post("http://localhost:3001/api/putData", {
-          id: this.props.location.state.id,
-          rating: message,
-        });
-      }
-    } else
-      axios
-        .post("http://localhost:3001/api/putData", {
-          id: this.props.location.state.id,
-          rating: message,
-        })
-        .then((e) =>
-          this.setState({
-            rating: message,
-          })
-        );
-  };
-
-  updateDataToDB = (idToUpdate, updateToApply) => {
-    let objIdToUpdate = null;
-    parseInt(idToUpdate);
-    this.state.articleArray.forEach((dat) => {
-      if (dat.id == idToUpdate) {
-        objIdToUpdate = dat._id;
-      }
+  onSubmit = (event) => {
+    const values = Array.from(event.target);
+    let data = {};
+    values.map((item) => {
+      data[item.name] = item.value;
     });
-    axios.post("http://localhost:3001/api/updateData", {
-      id: objIdToUpdate,
-      update: { rating: updateToApply },
-    });
-  };
-
-  deleteFromDB = (idTodelete) => {
-    parseInt(idTodelete);
-    let objIdToDelete = null;
-    this.state.articleArray.forEach((dat) => {
-      if (dat.id == idTodelete) {
-        objIdToDelete = dat._id;
-      }
-    });
-
-    axios.delete("http://localhost:3001/api/deleteData", {
-      data: {
-        id: objIdToDelete,
-      },
-    });
-    this.setState({
-      rating: null,
-    });
+    this.props.saveData(data);
+    this.setState({ open: false }, () =>
+      toast.success(
+        <Toast
+          info
+          title={"Booking Confirmed"}
+          content={`Booking confirmed with name ${data.fullname}`}
+        />
+      )
+    );
   };
 
   render() {
@@ -189,28 +119,79 @@ class Article extends React.Component {
                     />
                   </div>
                 )}
-                <Header as="h2">Rate Us:</Header>
-                <Rating
-                  maxRating={5}
-                  onRate={this.handleRate}
-                  icon="star"
-                  size="huge"
-                  clearable={true}
-                  rating={this.state.rating}
-                />
-                <Button
-                  basic
-                  color="grey"
-                  onClick={() =>
-                    this.deleteFromDB(this.props.location.state.id)
-                  }
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "1em 0em",
+                  }}
                 >
-                  Clear
-                </Button>
+                  <Button primary onClick={() => this.setState({ open: true })}>
+                    Request to Book
+                  </Button>
+                  <Link to="/user">
+                    <Button secondarys>Go Back</Button>
+                  </Link>
+                </div>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Segment>
+        <Modal
+          onClose={() => this.setState({ open: false })}
+          open={this.state.open}
+        >
+          <Modal.Header>Fill details</Modal.Header>
+          <Modal.Content image>
+            <Image
+              size="medium"
+              src="https://react.semantic-ui.com/images/avatar/large/rachel.png"
+              wrapped
+            />
+            <Modal.Description>
+              <Form onSubmit={this.onSubmit}>
+                <Form.Field inline>
+                  <label>Full Name</label>
+                  <input placeholder="Full Name" name="fullname" />
+                </Form.Field>
+                <Form.Field inline>
+                  <label>Property Name</label>
+                  <b name="propertyname">{this.state.data.slug}</b>
+                </Form.Field>
+                <Form.Field inline>
+                  <label>Check-in date:</label>
+                  <input placeholder="Date" name="date" />
+                </Form.Field>
+                <Form.Field inline>
+                  <label>No of guests</label>
+                  <input name="guests" />
+                </Form.Field>
+                <Form.Field inline>
+                  <label>Stay Duration</label>
+                  <input name="duration" />
+                </Form.Field>
+                <Form.Field inline>
+                  <Checkbox label="I agree to the Terms and Conditions" />
+                </Form.Field>
+                <Modal.Actions>
+                  <Button
+                    color="black"
+                    onClick={() => this.setState({ open: false })}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    content="Submit"
+                    labelPosition="right"
+                    icon="checkmark"
+                    positive
+                  />
+                </Modal.Actions>
+              </Form>
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
         <Segment className="footer-segment" vertical>
           <Grid celled="internally" columns="equal" stackable>
             <Grid.Row textAlign="center">
@@ -305,4 +286,7 @@ class Article extends React.Component {
   }
 }
 
-export default Article;
+export default compose(
+  connect((state, props) => ({}), { saveData }),
+  withRouter
+)(Article);
